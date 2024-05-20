@@ -21,4 +21,6 @@ export class AuthFormComponent {
   handleFormSubmit() {
     this.formSubmitted.emit(this.authForm.value as User);
   }
+
+  @Input() errorText!: string;
 }
