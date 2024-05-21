@@ -3,7 +3,7 @@ import { AuthFormComponent } from "../auth-form/auth-form.component";
 import { User } from "../interfaces/user.interface";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { environment } from "../../environments/environment.development";
+import { environment } from "../../environments/environment";
 import { catchError, throwError } from "rxjs";
 import { AuthService } from "../auth/auth.service";
 

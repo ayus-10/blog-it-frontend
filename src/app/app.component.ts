@@ -4,7 +4,7 @@ import { HeaderComponent } from "./header/header.component";
 import { AuthService } from "./auth/auth.service";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { AuthToken } from "./interfaces/auth-token.interface";
-import { environment } from "../environments/environment.development";
+import { environment } from "../environments/environment";
 import { catchError, throwError } from "rxjs";
 
 @Component({
