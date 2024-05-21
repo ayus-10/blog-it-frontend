@@ -37,7 +37,10 @@ export class LoginComponent {
       )
       .subscribe((res: any) => {
         localStorage.setItem("TOKEN", res.token);
-        this.authService.currentAuthToken.set({ token: res.token });
+        this.authService.currentAuthToken.set({
+          email: res.email,
+          token: res.token,
+        });
         this.router.navigateByUrl("/");
       });
   }

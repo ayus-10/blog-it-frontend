@@ -4,13 +4,18 @@
   </div>
   <div class="flex-none">
     <ul class="menu menu-horizontal px-1">
-      <li><a>Link</a></li>
+      <li><a>Create</a></li>
       <li>
         <details>
           <summary>Account</summary>
           <ul class="p-2 bg-base-200 rounded-t-none">
+            @if (isLoggedOut) {
             <li><a routerLink="/login">Log in</a></li>
             <li><a routerLink="/signup">Sign up</a></li>
+            } @else {
+            <li><button>Settings</button></li>
+            <li><button (click)="logOut()">Log out</button></li>
+            }
           </ul>
         </details>
       </li>
