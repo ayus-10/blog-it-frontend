@@ -30,9 +30,6 @@ export class AppComponent implements OnInit {
           return throwError(() => new Error(error.statusText));
         })
       )
-      .subscribe((res) => {
-        const authToken = res ? { email: res.email, token: res.token } : null;
-        this.authService.currentAuthToken.set(authToken);
-      });
+      .subscribe((res) => this.authService.currentAuthToken.set(res));
   }
 }

@@ -1,15 +1,18 @@
 import { Component, inject } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { AuthService } from "../auth/auth.service";
+import { ToastMessageComponent } from "../toast-message/toast-message.component";
+import { ToastMessageService } from "../toast-message/toast-message.service";
 
 @Component({
   selector: "app-header",
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ToastMessageComponent],
   templateUrl: "./header.component.html",
 })
 export class HeaderComponent {
   authService = inject(AuthService);
+  toastMessageService = inject(ToastMessageService);
 
   get isLoggedOut(): boolean {
     return this.authService.currentAuthToken() === null;
@@ -18,5 +21,7 @@ export class HeaderComponent {
   logOut() {
     localStorage.removeItem("TOKEN");
     this.authService.currentAuthToken.set(null);
+    this.toastMessageService.alertText.set("Logged out successfully");
+    setTimeout(() => this.toastMessageService.alertText.set(""), 3000);
   }
 }

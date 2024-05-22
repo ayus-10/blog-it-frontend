@@ -5,6 +5,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { catchError, throwError } from "rxjs";
+import { ToastMessageService } from "../toast-message/toast-message.service";
 
 @Component({
   selector: "app-signup",
@@ -23,6 +24,7 @@ export class SignupComponent {
 
   http = inject(HttpClient);
   router = inject(Router);
+  toastMessageService = inject(ToastMessageService);
 
   handleSignup(value: User) {
     this.http
@@ -41,6 +43,10 @@ export class SignupComponent {
           return throwError(() => new Error(error.statusText));
         })
       )
-      .subscribe(() => this.router.navigateByUrl("/login"));
+      .subscribe(() => {
+        this.toastMessageService.alertText.set("Signed up successfully");
+        this.router.navigateByUrl("/login");
+        setTimeout(() => this.toastMessageService.alertText.set(""), 3000);
+      });
   }
 }
