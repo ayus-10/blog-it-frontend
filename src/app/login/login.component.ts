@@ -36,7 +36,7 @@ export class LoginComponent {
         catchError((error: HttpErrorResponse) => {
           this.errorMessage = error.error.message;
           return throwError(() => new Error(error.statusText));
-        })
+        }),
       )
       .subscribe((res) => {
         localStorage.setItem("TOKEN", res.token);

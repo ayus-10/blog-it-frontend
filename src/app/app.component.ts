@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           return throwError(() => new Error(error.statusText));
-        })
+        }),
       )
       .subscribe((res) => this.authService.currentAuthToken.set(res));
   }

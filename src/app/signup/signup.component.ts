@@ -41,7 +41,7 @@ export class SignupComponent {
             this.errorMessage = "User already exist with provided email";
           }
           return throwError(() => new Error(error.statusText));
-        })
+        }),
       )
       .subscribe(() => {
         this.toastMessageService.alertText.set("Signed up successfully");

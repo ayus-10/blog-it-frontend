@@ -1,23 +1,27 @@
-<div class="navbar bg-base-200 relative">
+<div class="navbar relative bg-base-200">
   @if (this.toastMessageService.alertText()) {
-  <app-toast-message />
+    <app-toast-message />
   }
   <div class="flex-1">
     <a class="btn btn-ghost text-xl" routerLink="/">BlogIt</a>
   </div>
   <div class="flex-none">
     <ul class="menu menu-horizontal px-1">
-      <li><a>Create</a></li>
+      @if (isCurrentRouteCreate) {
+        <li><a routerLink="/">Home</a></li>
+      } @else {
+        <li><a routerLink="/create">Create</a></li>
+      }
       <li>
         <details>
           <summary>Account</summary>
-          <ul class="p-2 bg-base-200 rounded-t-none">
+          <ul class="rounded-t-none bg-base-200 p-2">
             @if (isLoggedOut) {
-            <li><a routerLink="/login">Log in</a></li>
-            <li><a routerLink="/signup">Sign up</a></li>
+              <li><a routerLink="/login">Log in</a></li>
+              <li><a routerLink="/signup">Sign up</a></li>
             } @else {
-            <li><button>Settings</button></li>
-            <li><button (click)="logOut()">Log out</button></li>
+              <li><button>Settings</button></li>
+              <li><button (click)="logOut()">Log out</button></li>
             }
           </ul>
         </details>
