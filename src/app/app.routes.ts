@@ -9,15 +9,18 @@ export const routes: Routes = [
     path: "login",
     component: LoginComponent,
     canActivate: [AuthGuard],
+    title: "Log in",
   },
   {
     path: "signup",
     component: SignupComponent,
     canActivate: [AuthGuard],
+    title: "Sign up",
   },
   {
     path: "create",
     component: CreateBlogComponent,
     canActivate: [AuthGuard],
+    title: "Create a blog",
   },
 ];

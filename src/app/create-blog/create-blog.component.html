@@ -1,1 +1,46 @@
-<p>create-blog works!</p>
+<form
+  class="mx-auto my-4 flex h-screen max-w-[1200px] flex-col px-4 md:px-8 lg:px-16"
+  [formGroup]="blogFormValues"
+  (submit)="handleSubmit()"
+>
+  <label class="form-control w-full">
+    <span class="label py-1 font-semibold">Blog title</span>
+    <input
+      type="text"
+      placeholder="Title goes here..."
+      class="input input-bordered w-full"
+      formControlName="title"
+    />
+  </label>
+  <div
+    class="flex w-full flex-col md:flex-row md:items-center md:justify-between"
+  >
+    <label class="form-control w-full md:max-w-xs">
+      <span class="label py-1 font-semibold">Category</span>
+      <select class="select select-bordered" formControlName="category">
+        @for (category of blogCategories; track category) {
+          <option [value]="category">{{ category }}</option>
+        }
+      </select>
+    </label>
+    <label class="form-control w-full md:max-w-xs">
+      <span class="label py-1 font-semibold">Image upload</span>
+      <input
+        type="file"
+        class="file-input file-input-bordered w-full md:max-w-xs"
+        formControlName="image"
+      />
+    </label>
+  </div>
+  <label class="form-control h-1/2">
+    <span class="label py-1 font-semibold">Blog content</span>
+    <textarea
+      class="textarea textarea-bordered grow"
+      placeholder="Content goes here..."
+      formControlName="content"
+    ></textarea>
+  </label>
+  <div class="my-4">
+    <button class="btn btn-primary text-base text-white">Done</button>
+  </div>
+</form>
