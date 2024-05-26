@@ -1,7 +1,7 @@
 <form
   class="mx-auto my-4 flex h-screen max-w-[1200px] flex-col px-4 md:px-8 lg:px-16"
-  [formGroup]="blogFormValues"
-  (submit)="handleSubmit()"
+  [formGroup]="blogForm"
+  (ngSubmit)="onSubmit()"
 >
   <label class="form-control w-full">
     <span class="label py-1 font-semibold">Blog title</span>
