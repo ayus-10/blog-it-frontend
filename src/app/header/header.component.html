@@ -1,6 +1,6 @@
 <div class="navbar relative bg-base-200">
-  @if (this.toastMessageService.alertText()) {
-    <app-toast-message />
+  @if (this.errorMessageService.alertText()) {
+    <app-error-message />
   }
   <div class="flex-1">
     <a class="btn btn-ghost text-xl" routerLink="/">BlogIt</a>

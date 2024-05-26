@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { catchError, throwError } from "rxjs";
 import { AuthService } from "../auth/auth.service";
-import { ToastMessageService } from "../toast-message/toast-message.service";
+import { ErrorMessageService } from "../error-message/error-message.service";
 import { AuthToken } from "../interfaces/auth-token.interface";
 
 @Component({
@@ -27,7 +27,7 @@ export class LoginComponent {
   http = inject(HttpClient);
   router = inject(Router);
   authService = inject(AuthService);
-  toastMessageService = inject(ToastMessageService);
+  errorMessageService = inject(ErrorMessageService);
 
   handleLogin(value: User) {
     this.http
@@ -44,9 +44,9 @@ export class LoginComponent {
           email: res.email,
           token: res.token,
         });
-        this.toastMessageService.alertText.set(`Logged in as ${res.email}`);
+        this.errorMessageService.alertText.set(`Logged in as ${res.email}`);
         this.router.navigateByUrl("/");
-        setTimeout(() => this.toastMessageService.alertText.set(""), 3000);
+        setTimeout(() => this.errorMessageService.alertText.set(""), 3000);
       });
   }
 }
