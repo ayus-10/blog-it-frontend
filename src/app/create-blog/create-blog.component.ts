@@ -8,7 +8,7 @@ import {
   ValidatorFn,
   Validators,
 } from "@angular/forms";
-import { ErrorMessageService } from "../error-message/error-message.service";
+import { AlertMessageService } from "../alert-message/alert-message.service";
 
 @Component({
   selector: "app-create-blog",
@@ -33,7 +33,7 @@ export class CreateBlogComponent implements OnInit {
     "Other",
   ];
 
-  errorMessageService = inject(ErrorMessageService);
+  alertMessageService = inject(AlertMessageService);
 
   blogForm!: FormGroup;
 
@@ -71,13 +71,11 @@ export class CreateBlogComponent implements OnInit {
     if (this.blogForm.valid) {
       return false;
     }
-    const { title, category, image, content } = this.blogForm.controls;
+    const { title, category, content } = this.blogForm.controls;
     if (title.errors) {
       this.setErrorMessage("Title must be at least 20 characters long");
     } else if (category.errors) {
       this.setErrorMessage("Selected category is invalid");
-    } else if (image.errors) {
-      this.setErrorMessage("");
     } else if (content.errors) {
       this.setErrorMessage("Content must contain at least 100 characters");
     }
@@ -85,9 +83,12 @@ export class CreateBlogComponent implements OnInit {
   }
 
   setErrorMessage(errorText: string) {
-    this.errorMessageService.alertText.set(errorText);
+    this.alertMessageService.alertMessage.set({
+      text: errorText,
+      type: "error",
+    });
     setTimeout(() => {
-      this.errorMessageService.alertText.set("");
+      this.alertMessageService.alertMessage.set(undefined);
     }, 3000);
   }
 

@@ -1,19 +1,19 @@
 import { Component, inject } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { AuthService } from "../auth/auth.service";
-import { ErrorMessageComponent } from "../error-message/error-message.component";
-import { ErrorMessageService } from "../error-message/error-message.service";
+import { AlertMessageComponent } from "../alert-message/alert-message.component";
+import { AlertMessageService } from "../alert-message/alert-message.service";
 
 @Component({
   selector: "app-header",
   standalone: true,
-  imports: [RouterLink, ErrorMessageComponent],
+  imports: [RouterLink, AlertMessageComponent],
   templateUrl: "./header.component.html",
 })
 export class HeaderComponent {
   router = inject(Router);
   authService = inject(AuthService);
-  errorMessageService = inject(ErrorMessageService);
+  alertMessageService = inject(AlertMessageService);
 
   get isLoggedOut(): boolean {
     return this.authService.currentAuthToken() === null;
@@ -26,8 +26,14 @@ export class HeaderComponent {
   logOut() {
     localStorage.removeItem("TOKEN");
     this.authService.currentAuthToken.set(null);
-    this.errorMessageService.alertText.set("Logged out successfully");
-    setTimeout(() => this.errorMessageService.alertText.set(""), 3000);
+    this.alertMessageService.alertMessage.set({
+      text: "Logged out successfully",
+      type: "success",
+    });
+    setTimeout(
+      () => this.alertMessageService.alertMessage.set(undefined),
+      3000,
+    );
     this.router.navigateByUrl("/login");
   }
 }

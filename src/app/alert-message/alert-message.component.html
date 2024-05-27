@@ -1,0 +1,13 @@
+<div
+  class="error error-center error-top absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2"
+>
+  <div
+    [ngClass]="{
+      alert: true,
+      'alert-success': alertType === 'success',
+      'alert-error': alertType === 'error'
+    }"
+  >
+    <span class="font-semibold text-white">{{ alertText }}</span>
+  </div>
+</div>

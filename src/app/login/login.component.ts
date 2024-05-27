@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { catchError, throwError } from "rxjs";
 import { AuthService } from "../auth/auth.service";
-import { ErrorMessageService } from "../error-message/error-message.service";
+import { AlertMessageService } from "../alert-message/alert-message.service";
 import { AuthToken } from "../interfaces/auth-token.interface";
 
 @Component({
@@ -27,7 +27,7 @@ export class LoginComponent {
   http = inject(HttpClient);
   router = inject(Router);
   authService = inject(AuthService);
-  errorMessageService = inject(ErrorMessageService);
+  alertMessageService = inject(AlertMessageService);
 
   handleLogin(value: User) {
     this.http
@@ -44,9 +44,15 @@ export class LoginComponent {
           email: res.email,
           token: res.token,
         });
-        this.errorMessageService.alertText.set(`Logged in as ${res.email}`);
+        this.alertMessageService.alertMessage.set({
+          text: `Logged in as ${res.email}`,
+          type: "success",
+        });
         this.router.navigateByUrl("/");
-        setTimeout(() => this.errorMessageService.alertText.set(""), 3000);
+        setTimeout(
+          () => this.alertMessageService.alertMessage.set(undefined),
+          3000,
+        );
       });
   }
 }

@@ -5,7 +5,7 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { catchError, throwError } from "rxjs";
-import { ErrorMessageService } from "../error-message/error-message.service";
+import { AlertMessageService } from "../alert-message/alert-message.service";
 
 @Component({
   selector: "app-signup",
@@ -24,7 +24,7 @@ export class SignupComponent {
 
   http = inject(HttpClient);
   router = inject(Router);
-  errorMessageService = inject(ErrorMessageService);
+  alertMessageService = inject(AlertMessageService);
 
   handleSignup(value: User) {
     this.http
@@ -44,9 +44,15 @@ export class SignupComponent {
         }),
       )
       .subscribe(() => {
-        this.errorMessageService.alertText.set("Signed up successfully");
+        this.alertMessageService.alertMessage.set({
+          text: "Signed up successfully",
+          type: "success",
+        });
         this.router.navigateByUrl("/login");
-        setTimeout(() => this.errorMessageService.alertText.set(""), 3000);
+        setTimeout(
+          () => this.alertMessageService.alertMessage.set(undefined),
+          3000,
+        );
       });
   }
 }
