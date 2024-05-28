@@ -12,16 +12,10 @@ import { AlertMessageService } from "../alert-message/alert-message.service";
   standalone: true,
   imports: [AuthFormComponent],
   template: `
-    <app-auth-form
-      action="signup"
-      (formSubmitted)="handleSignup($event)"
-      [errorText]="errorMessage"
-    />
+    <app-auth-form action="signup" (formSubmitted)="handleSignup($event)" />
   `,
 })
 export class SignupComponent {
-  errorMessage!: string;
-
   http = inject(HttpClient);
   router = inject(Router);
   alertMessageService = inject(AlertMessageService);
@@ -33,25 +27,30 @@ export class SignupComponent {
         catchError((error: HttpErrorResponse) => {
           if (error.status === 400) {
             if (typeof error.error.message === "string") {
-              this.errorMessage = error.error.message;
-            } else {
-              this.errorMessage = error.error.message[0];
+              this.alertMessageService.setAlertMessage(
+                error.error.message,
+                "error",
+              );
+            } else if (Array.isArray(error.error.message)) {
+              this.alertMessageService.setAlertMessage(
+                error.error.message[0],
+                "error",
+              );
             }
           } else if (error.status === 500) {
-            this.errorMessage = "User already exist with provided email";
+            this.alertMessageService.setAlertMessage(
+              "User already exist with provided email",
+              "error",
+            );
           }
           return throwError(() => new Error(error.statusText));
         }),
       )
       .subscribe(() => {
-        this.alertMessageService.alertMessage.set({
-          text: "Signed up successfully",
-          type: "success",
-        });
         this.router.navigateByUrl("/login");
-        setTimeout(
-          () => this.alertMessageService.alertMessage.set(undefined),
-          3000,
+        this.alertMessageService.setAlertMessage(
+          "Signed up successfully",
+          "success",
         );
       });
   }

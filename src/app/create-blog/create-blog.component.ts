@@ -73,23 +73,22 @@ export class CreateBlogComponent implements OnInit {
     }
     const { title, category, content } = this.blogForm.controls;
     if (title.errors) {
-      this.setErrorMessage("Title must be at least 20 characters long");
+      this.alertMessageService.setAlertMessage(
+        "Title must be at least 20 characters long",
+        "error",
+      );
     } else if (category.errors) {
-      this.setErrorMessage("Selected category is invalid");
+      this.alertMessageService.setAlertMessage(
+        "Selected category is invalid",
+        "error",
+      );
     } else if (content.errors) {
-      this.setErrorMessage("Content must contain at least 100 characters");
+      this.alertMessageService.setAlertMessage(
+        "Content must contain at least 100 characters",
+        "error",
+      );
     }
     return true;
-  }
-
-  setErrorMessage(errorText: string) {
-    this.alertMessageService.alertMessage.set({
-      text: errorText,
-      type: "error",
-    });
-    setTimeout(() => {
-      this.alertMessageService.alertMessage.set(undefined);
-    }, 3000);
   }
 
   onSubmit() {

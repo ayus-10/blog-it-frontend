@@ -14,16 +14,10 @@ import { AuthToken } from "../interfaces/auth-token.interface";
   standalone: true,
   imports: [AuthFormComponent],
   template: `
-    <app-auth-form
-      action="login"
-      (formSubmitted)="handleLogin($event)"
-      [errorText]="errorMessage"
-    />
+    <app-auth-form action="login" (formSubmitted)="handleLogin($event)" />
   `,
 })
 export class LoginComponent {
-  errorMessage!: string;
-
   http = inject(HttpClient);
   router = inject(Router);
   authService = inject(AuthService);
@@ -34,7 +28,10 @@ export class LoginComponent {
       .post<AuthToken>(`${environment.apiUrl}/auth`, value)
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.errorMessage = error.error.message;
+          this.alertMessageService.setAlertMessage(
+            error.error.message,
+            "error",
+          );
           return throwError(() => new Error(error.statusText));
         }),
       )
@@ -44,14 +41,10 @@ export class LoginComponent {
           email: res.email,
           token: res.token,
         });
-        this.alertMessageService.alertMessage.set({
-          text: `Logged in as ${res.email}`,
-          type: "success",
-        });
         this.router.navigateByUrl("/");
-        setTimeout(
-          () => this.alertMessageService.alertMessage.set(undefined),
-          3000,
+        this.alertMessageService.setAlertMessage(
+          `Logged in as ${res.email}`,
+          "success",
         );
       });
   }
