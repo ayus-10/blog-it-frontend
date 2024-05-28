@@ -9,6 +9,8 @@ import {
   Validators,
 } from "@angular/forms";
 import { AlertMessageService } from "../alert-message/alert-message.service";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: "app-create-blog",
@@ -33,9 +35,18 @@ export class CreateBlogComponent implements OnInit {
     "Other",
   ];
 
+  http = inject(HttpClient);
+
   alertMessageService = inject(AlertMessageService);
 
   blogForm!: FormGroup;
+
+  selectedImage!: File | null;
+
+  onImageSelect(event: Event) {
+    const eventTarget = event.target as HTMLInputElement;
+    this.selectedImage = eventTarget.files ? eventTarget.files[0] : null;
+  }
 
   ngOnInit(): void {
     this.blogForm = new FormGroup({
@@ -47,7 +58,6 @@ export class CreateBlogComponent implements OnInit {
         Validators.required,
         this.validateCategory(),
       ]),
-      image: new FormControl(""),
       content: new FormControl("", [
         Validators.required,
         Validators.minLength(100),
@@ -95,6 +105,21 @@ export class CreateBlogComponent implements OnInit {
     if (this.validationErrors()) {
       return;
     }
-    console.log(this.blogForm.value);
+
+    const { title, category, content } = this.blogForm.value;
+
+    const blogData = new FormData();
+
+    blogData.append("title", title as string);
+    blogData.append("category", category as string);
+    blogData.append("content", content as string);
+
+    if (this.selectedImage) {
+      blogData.append("image", this.selectedImage);
+    }
+
+    this.http
+      .post(`${environment.apiUrl}/blog`, blogData)
+      .subscribe((res) => console.log(res));
   }
 }

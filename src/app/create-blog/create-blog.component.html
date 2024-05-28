@@ -28,7 +28,7 @@
       <input
         type="file"
         class="file-input file-input-bordered w-full md:max-w-xs"
-        formControlName="image"
+        (change)="onImageSelect($event)"
       />
     </label>
   </div>
