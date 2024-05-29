@@ -16,4 +16,12 @@ export class AlertMessageService {
       this.alertMessage.set(undefined);
     }, 3000);
   }
+
+  setErrorMessage(errorText: string) {
+    this.setAlertMessage(errorText, "error");
+  }
+
+  setSuccessMessage(successText: string) {
+    this.setAlertMessage(successText, "success");
+  }
 }

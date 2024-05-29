@@ -9,8 +9,10 @@ import {
   Validators,
 } from "@angular/forms";
 import { AlertMessageService } from "../alert-message/alert-message.service";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { environment } from "../../environments/environment";
+import { catchError, throwError } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-create-blog",
@@ -36,7 +38,7 @@ export class CreateBlogComponent implements OnInit {
   ];
 
   http = inject(HttpClient);
-
+  router = inject(Router);
   alertMessageService = inject(AlertMessageService);
 
   blogForm!: FormGroup;
@@ -83,19 +85,14 @@ export class CreateBlogComponent implements OnInit {
     }
     const { title, category, content } = this.blogForm.controls;
     if (title.errors) {
-      this.alertMessageService.setAlertMessage(
-        "Title must be at least 20 characters long",
-        "error",
+      this.alertMessageService.setErrorMessage(
+        "Title must contain at least 20 characters",
       );
     } else if (category.errors) {
-      this.alertMessageService.setAlertMessage(
-        "Selected category is invalid",
-        "error",
-      );
+      this.alertMessageService.setErrorMessage("Selected category is invalid");
     } else if (content.errors) {
-      this.alertMessageService.setAlertMessage(
+      this.alertMessageService.setErrorMessage(
         "Content must contain at least 100 characters",
-        "error",
       );
     }
     return true;
@@ -120,6 +117,23 @@ export class CreateBlogComponent implements OnInit {
 
     this.http
       .post(`${environment.apiUrl}/blog`, blogData)
-      .subscribe((res) => console.log(res));
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 400) {
+            if (typeof error.error.message === "string") {
+              this.alertMessageService.setErrorMessage(error.error.message);
+            } else if (Array.isArray(error.error.message)) {
+              this.alertMessageService.setErrorMessage(error.error.message[0]);
+            }
+          } else if (error.status === 406) {
+            this.alertMessageService.setErrorMessage(error.error.error);
+          }
+          return throwError(() => new Error(error.statusText));
+        }),
+      )
+      .subscribe(() => {
+        this.router.navigateByUrl("/");
+        this.alertMessageService.setSuccessMessage("Created blog successfully");
+      });
   }
 }

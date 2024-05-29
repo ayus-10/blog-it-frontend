@@ -28,10 +28,7 @@ export class LoginComponent {
       .post<AuthToken>(`${environment.apiUrl}/auth`, value)
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.alertMessageService.setAlertMessage(
-            error.error.message,
-            "error",
-          );
+          this.alertMessageService.setErrorMessage(error.error.message);
           return throwError(() => new Error(error.statusText));
         }),
       )
@@ -42,10 +39,7 @@ export class LoginComponent {
           token: res.token,
         });
         this.router.navigateByUrl("/");
-        this.alertMessageService.setAlertMessage(
-          `Logged in as ${res.email}`,
-          "success",
-        );
+        this.alertMessageService.setSuccessMessage(`Logged in as ${res.email}`);
       });
   }
 }

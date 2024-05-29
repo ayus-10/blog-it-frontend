@@ -27,20 +27,13 @@ export class SignupComponent {
         catchError((error: HttpErrorResponse) => {
           if (error.status === 400) {
             if (typeof error.error.message === "string") {
-              this.alertMessageService.setAlertMessage(
-                error.error.message,
-                "error",
-              );
+              this.alertMessageService.setErrorMessage(error.error.message);
             } else if (Array.isArray(error.error.message)) {
-              this.alertMessageService.setAlertMessage(
-                error.error.message[0],
-                "error",
-              );
+              this.alertMessageService.setErrorMessage(error.error.message[0]);
             }
           } else if (error.status === 500) {
-            this.alertMessageService.setAlertMessage(
+            this.alertMessageService.setErrorMessage(
               "User already exist with provided email",
-              "error",
             );
           }
           return throwError(() => new Error(error.statusText));
@@ -48,10 +41,7 @@ export class SignupComponent {
       )
       .subscribe(() => {
         this.router.navigateByUrl("/login");
-        this.alertMessageService.setAlertMessage(
-          "Signed up successfully",
-          "success",
-        );
+        this.alertMessageService.setSuccessMessage("Signed up successfully");
       });
   }
 }
