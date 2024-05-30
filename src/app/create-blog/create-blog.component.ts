@@ -132,7 +132,7 @@ export class CreateBlogComponent implements OnInit {
         }),
       )
       .subscribe(() => {
-        this.router.navigateByUrl("/");
+        this.router.navigateByUrl("/home");
         this.alertMessageService.setSuccessMessage("Created blog successfully");
       });
   }

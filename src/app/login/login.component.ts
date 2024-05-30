@@ -38,7 +38,7 @@ export class LoginComponent {
           email: res.email,
           token: res.token,
         });
-        this.router.navigateByUrl("/");
+        this.router.navigateByUrl("/home");
         this.alertMessageService.setSuccessMessage(`Logged in as ${res.email}`);
       });
   }

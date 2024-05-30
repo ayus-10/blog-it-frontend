@@ -1,14 +1,14 @@
-<div class="navbar relative bg-base-200">
+<div class="navbar sticky inset-0 z-[100] bg-base-200">
   @if (this.alertMessageService.alertMessage()) {
     <app-alert-message />
   }
   <div class="flex-1">
-    <a class="btn btn-ghost text-xl" routerLink="/">BlogIt</a>
+    <a class="btn btn-ghost text-xl" routerLink="/home">BlogIt</a>
   </div>
   <div class="flex-none">
     <ul class="menu menu-horizontal px-1">
       @if (isCurrentRouteCreate) {
-        <li><a routerLink="/">Home</a></li>
+        <li><a routerLink="/home">Home</a></li>
       } @else {
         <li><a routerLink="/create">Create</a></li>
       }

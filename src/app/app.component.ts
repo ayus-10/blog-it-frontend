@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core";
-import { RouterOutlet } from "@angular/router";
+import { Router, RouterOutlet } from "@angular/router";
 import { HeaderComponent } from "./header/header.component";
 import { AuthService } from "./auth/auth.service";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
@@ -21,6 +21,7 @@ import { catchError, throwError } from "rxjs";
 export class AppComponent implements OnInit {
   authService = inject(AuthService);
   http = inject(HttpClient);
+  router = inject(Router);
 
   ngOnInit(): void {
     this.http
@@ -30,6 +31,9 @@ export class AppComponent implements OnInit {
           return throwError(() => new Error(error.statusText));
         }),
       )
-      .subscribe((res) => this.authService.currentAuthToken.set(res));
+      .subscribe((res) => {
+        this.authService.currentAuthToken.set(res);
+        this.router.navigateByUrl("/home");
+      });
   }
 }

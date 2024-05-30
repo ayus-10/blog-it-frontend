@@ -16,7 +16,7 @@ export const AuthGuard: CanActivateFn = (route) => {
     if (isAuthTokenNull) {
       return true;
     }
-    router.navigateByUrl("/");
+    router.navigateByUrl("/home");
     return false;
   }
 

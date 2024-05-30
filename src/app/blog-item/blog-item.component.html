@@ -1,0 +1,16 @@
+<div class="card mx-auto w-full max-w-[600px] rounded-md bg-base-100 shadow-xl">
+  <figure>
+    <img
+      src="{{ this.baseUrl }}/{{ blogContent.imageFile }}"
+      alt="{{ blogContent.title }}"
+    />
+  </figure>
+  <div class="card-body">
+    <h2 class="uppercase">{{ blogContent.category }}</h2>
+    <h2 class="card-title">{{ blogContent.title }}</h2>
+    <p class="line-clamp-3">{{ blogContent.content }}</p>
+    <div class="card-actions">
+      <button class="btn btn-primary text-white">Read more</button>
+    </div>
+  </div>
+</div>
