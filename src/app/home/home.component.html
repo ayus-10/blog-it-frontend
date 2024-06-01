@@ -1,4 +1,47 @@
-<section class="flex w-full flex-col justify-center gap-8 px-4 py-8">
+<section
+  class="mx-auto flex w-full max-w-[600px] flex-col justify-center gap-8 px-4 py-8"
+>
+  <div class="flex flex-col gap-3">
+    <h1 class="card-title text-3xl">Popular Blogs</h1>
+    <div class="relative flex h-12 items-center">
+      <input
+        type="text"
+        placeholder="Search"
+        class="input input-bordered absolute inset-0 z-10 pr-10"
+      />
+      <ng-icon name="featherSearch" class="absolute right-4 z-20" />
+    </div>
+    <div>
+      <div class="flex items-center gap-1">
+        <ng-icon name="featherFilter" class="text-xl" />
+        <h3 class="card-title">Filter</h3>
+      </div>
+      <div class="flex flex-row justify-between gap-2 md:gap-4">
+        <div class="flex w-1/2 flex-col">
+          <span>Category</span>
+          <select
+            class="select select-bordered select-sm"
+            formControlName="category"
+          >
+            @for (category of blogCategories; track category) {
+              <option [value]="category">{{ category }}</option>
+            }
+          </select>
+        </div>
+        <div class="flex w-1/2 flex-col">
+          <span>Sort</span>
+          <select
+            class="select select-bordered select-sm"
+            formControlName="category"
+          >
+            @for (category of sortCategories; track category) {
+              <option [value]="category">{{ category }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
   @for (blog of fetchedBlogs; track blog._id) {
     <app-blog-item [blogContent]="blog" />
   }

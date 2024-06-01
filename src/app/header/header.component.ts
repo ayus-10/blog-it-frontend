@@ -26,14 +26,7 @@ export class HeaderComponent {
   logOut() {
     localStorage.removeItem("TOKEN");
     this.authService.currentAuthToken.set(null);
-    this.alertMessageService.alertMessage.set({
-      text: "Logged out successfully",
-      type: "success",
-    });
-    setTimeout(
-      () => this.alertMessageService.alertMessage.set(undefined),
-      3000,
-    );
+    this.alertMessageService.setSuccessMessage("Logged out successfully");
     this.router.navigateByUrl("/login");
   }
 }

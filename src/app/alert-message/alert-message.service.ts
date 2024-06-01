@@ -12,9 +12,10 @@ export class AlertMessageService {
       text: alertText,
       type: alertType,
     });
-    setTimeout(() => {
-      this.alertMessage.set(undefined);
-    }, 3000);
+    setTimeout(
+      () => this.alertMessage.set(undefined),
+      alertType === "success" ? 2000 : 4000,
+    );
   }
 
   setErrorMessage(errorText: string) {

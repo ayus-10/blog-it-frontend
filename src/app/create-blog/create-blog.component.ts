@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core";
+import { blogCategories } from "../data/blog-categories";
 import {
   AbstractControl,
   FormControl,
@@ -21,21 +22,7 @@ import { Router } from "@angular/router";
   templateUrl: "./create-blog.component.html",
 })
 export class CreateBlogComponent implements OnInit {
-  blogCategories = [
-    "Lifestyle",
-    "Technology",
-    "Health and Fitness",
-    "Food and Drink",
-    "Fashion and Beauty",
-    "Personal Finance",
-    "Education",
-    "Business and Entrepreneurship",
-    "Arts and Crafts",
-    "Entertainment",
-    "Travel",
-    "Gaming",
-    "Other",
-  ];
+  blogCategories = blogCategories;
 
   http = inject(HttpClient);
   router = inject(Router);
