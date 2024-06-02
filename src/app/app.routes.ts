@@ -4,8 +4,14 @@ import { SignupComponent } from "./signup/signup.component";
 import { CreateBlogComponent } from "./create-blog/create-blog.component";
 import { AuthGuard } from "./guards/auth.guard";
 import { HomeComponent } from "./home/home.component";
+import { ViewBlogComponent } from "./view-blog/view-blog.component";
 
 export const routes: Routes = [
+  {
+    path: "",
+    redirectTo: "/home",
+    pathMatch: "full",
+  },
   {
     path: "login",
     component: LoginComponent,
@@ -28,5 +34,9 @@ export const routes: Routes = [
     path: "home",
     component: HomeComponent,
     title: "Home - BlogIt",
+  },
+  {
+    path: "view/:id",
+    component: ViewBlogComponent,
   },
 ];

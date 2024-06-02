@@ -31,9 +31,6 @@ export class AppComponent implements OnInit {
           return throwError(() => new Error(error.statusText));
         }),
       )
-      .subscribe((res) => {
-        this.authService.currentAuthToken.set(res);
-        this.router.navigateByUrl("/home");
-      });
+      .subscribe((res) => this.authService.currentAuthToken.set(res));
   }
 }

@@ -2,7 +2,7 @@
   <figure>
     <img
       class="size-full"
-      src="{{ this.baseUrl }}/{{ blogContent.imageFile }}"
+      src="{{ baseUrl }}/{{ blogContent.imageFile }}"
       alt="{{ blogContent.title }}"
     />
   </figure>
@@ -25,7 +25,12 @@
           <span>{{ blogContent.comments.length }}</span>
         </div>
       </div>
-      <button class="btn btn-primary text-white">Read more</button>
+      <button
+        class="btn btn-primary text-white"
+        (click)="redirect(blogContent._id)"
+      >
+        Read more
+      </button>
     </div>
   </div>
 </div>
