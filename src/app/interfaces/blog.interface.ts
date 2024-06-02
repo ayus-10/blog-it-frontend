@@ -5,4 +5,7 @@ export interface Blog {
   category: string;
   content: string;
   imageFile: string;
+  views: number;
+  likes: number;
+  comments: string[];
 }

@@ -12,4 +12,6 @@ export const blogCategories = [
   "Travel",
   "Gaming",
   "Other",
-];
+] as const;
+
+export type BlogCategory = (typeof blogCategories)[number] | "All";
