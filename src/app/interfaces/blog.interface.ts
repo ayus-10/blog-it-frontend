@@ -6,6 +6,6 @@ export interface Blog {
   content: string;
   imageFile: string;
   views: number;
-  likes: number;
+  likes: string[];
   comments: string[];
 }

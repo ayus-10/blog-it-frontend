@@ -18,6 +18,8 @@ import {
   featherHeart,
 } from "@ng-icons/feather-icons";
 import { CommonModule } from "@angular/common";
+import { AuthService } from "../auth/auth.service";
+import { AlertMessageService } from "../alert-message/alert-message.service";
 
 @Component({
   selector: "app-view-blog",
@@ -33,6 +35,8 @@ export class ViewBlogComponent implements OnInit {
 
   title = inject(Title);
   http = inject(HttpClient);
+  authService = inject(AuthService);
+  alertMessageService = inject(AlertMessageService);
 
   currentBlog = signal<Blog | undefined>(undefined);
 
@@ -40,14 +44,65 @@ export class ViewBlogComponent implements OnInit {
     return `${environment.apiUrl}/${this.currentBlog()?.imageFile}`;
   });
 
-  get blog(): Blog {
-    return this.currentBlog() as Blog;
-  }
-
   liked = signal(false);
 
-  onLikeClick() {
-    this.liked.set(true);
+  onLikeButtonClick() {
+    const liked = this.updateLikes();
+    if (liked) {
+      this.liked.set(true);
+    }
+  }
+
+  updateLikes() {
+    let result = false;
+    this.http
+      .get<Blog | null>(`${environment.apiUrl}/blog/likes/${this.id}`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 403) {
+            this.alertMessageService.setErrorMessage(
+              "You must be logged in to like the blog",
+            );
+          }
+          return throwError(() => new Error(error.statusText));
+        }),
+      )
+      .subscribe((res) => {
+        if (res) {
+          result = true;
+        }
+      });
+    return result;
+  }
+
+  updateViews() {
+    if (!localStorage.getItem("VIEWED_BLOGS")) {
+      localStorage.setItem("VIEWED_BLOGS", JSON.stringify([]));
+    }
+
+    const viewedBlogsString = localStorage.getItem("VIEWED_BLOGS") as string;
+    const viewedBlogs: string[] = JSON.parse(viewedBlogsString);
+
+    const currentBlogId = this.id;
+    if (!viewedBlogs.includes(currentBlogId)) {
+      viewedBlogs.push(currentBlogId);
+      localStorage.setItem("VIEWED_BLOGS", JSON.stringify(viewedBlogs));
+    } else {
+      return;
+    }
+
+    this.http
+      .get(`${environment.apiUrl}/blog/views/${this.id}`)
+      .pipe(
+        catchError((error: HttpErrorResponse) =>
+          throwError(() => new Error(error.statusText)),
+        ),
+      )
+      .subscribe();
+  }
+
+  get currentUserEmail() {
+    return this.authService.currentAuthToken()?.email;
   }
 
   ngOnInit(): void {
@@ -61,6 +116,14 @@ export class ViewBlogComponent implements OnInit {
       .subscribe((res) => {
         this.currentBlog.set(res);
         this.title.setTitle(`${res.title} - BlogIt`);
+        if (
+          this.currentUserEmail &&
+          res.likes.includes(this.currentUserEmail)
+        ) {
+          this.liked.set(true);
+        }
       });
+
+    this.updateViews();
   }
 }
