@@ -7,5 +7,10 @@ export interface Blog {
   imageFile: string;
   views: number;
   likes: string[];
-  comments: string[];
+  comments: Comment[];
+}
+
+export interface Comment {
+  userEmail: string;
+  comment: string;
 }

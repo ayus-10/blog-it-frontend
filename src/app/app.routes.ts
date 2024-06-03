@@ -5,6 +5,7 @@ import { CreateBlogComponent } from "./create-blog/create-blog.component";
 import { AuthGuard } from "./guards/auth.guard";
 import { HomeComponent } from "./home/home.component";
 import { ViewBlogComponent } from "./view-blog/view-blog.component";
+import { NotFoundComponent } from "./not-found/not-found.component";
 
 export const routes: Routes = [
   {
@@ -38,5 +39,9 @@ export const routes: Routes = [
   {
     path: "view/:id",
     component: ViewBlogComponent,
+  },
+  {
+    path: "**",
+    component: NotFoundComponent,
   },
 ];

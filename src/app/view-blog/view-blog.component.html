@@ -24,30 +24,66 @@
       </div>
     </div>
   </div>
-  <div
-    class="mx-auto flex min-h-screen max-w-[800px] flex-col gap-12 px-8 py-4"
-  >
-    <p class="text-lg md:text-xl">
+  <div class="mx-auto flex min-h-screen max-w-[800px] flex-col gap-12 py-4">
+    <p class="px-8 text-lg md:text-xl">
       {{ currentBlog()?.content }}
     </p>
-    <div>
-      <h3 class="card-title mb-2 uppercase">Likes and comments</h3>
-      <div class="flex w-full items-center gap-2">
+    <div class="px-8">
+      <h3 class="card-title mb-2 uppercase">Like and comment</h3>
+      <div class="flex w-full items-center gap-1 md:gap-2">
         <button
-          (click)="onLikeButtonClick()"
+          (click)="updateLikes()"
           class="btn border-transparent bg-transparent p-0 outline-none hover:border-transparent hover:bg-transparent"
         >
           <ng-icon
-            name="featherHeart"
-            [ngClass]="{ 'text-5xl': true, 'text-red-500': liked() }"
+            [name]="liked() ? 'bootstrapHeartFill' : 'bootstrapHeart'"
+            [ngClass]="{
+              'text-4xl md:text-5xl': true,
+              'text-red-500': liked()
+            }"
           />
         </button>
-        <input
-          type="text"
-          placeholder="Add a comment"
-          class="input input-bordered grow"
-        />
-        <button class="btn btn-primary text-white">Add</button>
+        <div class="relative grow">
+          <input
+            type="text"
+            placeholder="Add a comment"
+            class="input input-bordered w-full"
+            [formControl]="commentInput"
+          />
+          <button
+            (click)="addComment()"
+            class="btn btn-primary absolute right-0 top-0 z-10 text-white"
+          >
+            <ng-icon name="featherSend" />
+          </button>
+        </div>
+      </div>
+      <div class="divider divider-start uppercase">Comments</div>
+      <div class="my-4 flex max-h-[200px] flex-col gap-2 overflow-y-auto">
+        @for (cmt of blogComments(); track $index) {
+          <div
+            class="input input-bordered relative flex h-full items-center justify-between py-2"
+          >
+            <div>
+              <div class="flex items-center gap-2">
+                <div
+                  class="grid size-8 place-content-center rounded-full bg-accent"
+                >
+                  <ng-icon name="featherUser" class="text-xl text-white" />
+                </div>
+                <span class="card-title">{{ cmt.userEmail }}</span>
+              </div>
+              <p>
+                {{ cmt.comment }}
+              </p>
+            </div>
+            @if (cmt.userEmail === currentUserEmail) {
+              <button class="btn" (click)="removeComment(cmt.comment)">
+                <ng-icon name="featherTrash2" />
+              </button>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>
