@@ -26,6 +26,10 @@ export class HomeComponent implements OnInit {
   blogCategories = blogCategories;
   sortOptions = sortOptions;
 
+  isLoading = signal(false);
+
+  http = inject(HttpClient);
+
   searchInput = signal<string>("");
   selectedCategory = signal<BlogCategory>("All");
   selectedSort = signal<SortOption>("Views");
@@ -111,9 +115,8 @@ export class HomeComponent implements OnInit {
     return blogs;
   }
 
-  http = inject(HttpClient);
-
   ngOnInit(): void {
+    this.isLoading.set(true);
     this.http
       .get<Blog[]>(`${environment.apiUrl}/blog`)
       .pipe(
@@ -123,6 +126,7 @@ export class HomeComponent implements OnInit {
       )
       .subscribe((res) => {
         this.fetchedBlogs.set(res);
+        this.isLoading.set(false);
       });
   }
 }

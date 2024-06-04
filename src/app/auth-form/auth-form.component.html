@@ -52,6 +52,10 @@
   <button
     class="btn btn-primary text-lg font-semibold capitalize text-gray-200"
   >
-    {{ action }}
+    @if (isLoading) {
+      <span class="loading loading-dots loading-lg"></span>
+    } @else {
+      {{ action }}
+    }
   </button>
 </form>

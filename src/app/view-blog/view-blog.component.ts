@@ -51,6 +51,8 @@ export class ViewBlogComponent implements OnInit {
     return this.authService.currentAuthToken()?.email;
   }
 
+  isLoading = signal(false);
+
   title = inject(Title);
   http = inject(HttpClient);
   authService = inject(AuthService);
@@ -164,6 +166,7 @@ export class ViewBlogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLoading.set(true);
     this.http
       .get<Blog>(`${environment.apiUrl}/blog/${this.id}`)
       .pipe(
@@ -172,6 +175,7 @@ export class ViewBlogComponent implements OnInit {
         ),
       )
       .subscribe((res) => {
+        this.isLoading.set(false);
         this.currentBlog.set(res);
         this.blogComments.set(res.comments.reverse());
         this.title.setTitle(`${res.title} - BlogIt`);

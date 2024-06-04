@@ -8,6 +8,7 @@ import { catchError, throwError } from "rxjs";
 import { AuthService } from "../auth/auth.service";
 import { AlertMessageService } from "../alert-message/alert-message.service";
 import { AuthToken } from "../interfaces/auth-token.interface";
+import { AuthFormService } from "../auth-form/auth-form.service";
 
 @Component({
   selector: "app-login",
@@ -22,8 +23,10 @@ export class LoginComponent {
   router = inject(Router);
   authService = inject(AuthService);
   alertMessageService = inject(AlertMessageService);
+  authFormService = inject(AuthFormService);
 
   handleLogin(value: User) {
+    this.authFormService.loading.set(true);
     this.http
       .post<AuthToken>(`${environment.apiUrl}/auth`, value)
       .pipe(
@@ -41,5 +44,6 @@ export class LoginComponent {
         this.router.navigateByUrl("/home");
         this.alertMessageService.setSuccessMessage(`Logged in as ${res.email}`);
       });
+    this.authFormService.loading.set(false);
   }
 }

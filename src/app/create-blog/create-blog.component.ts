@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject, signal } from "@angular/core";
 import { blogCategories } from "../data/blog-categories";
 import {
   AbstractControl,
@@ -31,6 +31,8 @@ export class CreateBlogComponent implements OnInit {
   blogForm!: FormGroup;
 
   selectedImage!: File | null;
+
+  isLoading = signal(false);
 
   onImageSelect(event: Event) {
     const eventTarget = event.target as HTMLInputElement;

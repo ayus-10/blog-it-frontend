@@ -41,6 +41,12 @@
     ></textarea>
   </label>
   <div class="my-4">
-    <button class="btn btn-primary text-base text-white">Done</button>
+    <button class="btn btn-primary text-base text-white">
+      @if (isLoading()) {
+        <span class="loading loading-dots loading-lg"></span>
+      } @else {
+        Done
+      }
+    </button>
   </div>
 </form>

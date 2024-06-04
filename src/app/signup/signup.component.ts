@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { catchError, throwError } from "rxjs";
 import { AlertMessageService } from "../alert-message/alert-message.service";
+import { AuthFormService } from "../auth-form/auth-form.service";
 
 @Component({
   selector: "app-signup",
@@ -19,8 +20,10 @@ export class SignupComponent {
   http = inject(HttpClient);
   router = inject(Router);
   alertMessageService = inject(AlertMessageService);
+  authFormService = inject(AuthFormService);
 
   handleSignup(value: User) {
+    this.authFormService.loading.set(true);
     this.http
       .post(`${environment.apiUrl}/user`, value)
       .pipe(
@@ -43,5 +46,6 @@ export class SignupComponent {
         this.router.navigateByUrl("/login");
         this.alertMessageService.setSuccessMessage("Signed up successfully");
       });
+    this.authFormService.loading.set(false);
   }
 }
