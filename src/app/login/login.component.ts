@@ -36,6 +36,7 @@ export class LoginComponent {
         }),
       )
       .subscribe((res) => {
+        this.authFormService.loading.set(false);
         localStorage.setItem("TOKEN", res.token);
         this.authService.currentAuthToken.set({
           email: res.email,
@@ -44,6 +45,8 @@ export class LoginComponent {
         this.router.navigateByUrl("/home");
         this.alertMessageService.setSuccessMessage(`Logged in as ${res.email}`);
       });
-    this.authFormService.loading.set(false);
+    if (this.authFormService.loading()) {
+      setTimeout(() => this.authFormService.loading.set(false), 3000);
+    }
   }
 }

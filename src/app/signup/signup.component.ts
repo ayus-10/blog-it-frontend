@@ -43,9 +43,12 @@ export class SignupComponent {
         }),
       )
       .subscribe(() => {
+        this.authFormService.loading.set(false);
         this.router.navigateByUrl("/login");
         this.alertMessageService.setSuccessMessage("Signed up successfully");
       });
-    this.authFormService.loading.set(false);
+    if (this.authFormService.loading()) {
+      setTimeout(() => this.authFormService.loading.set(false), 3000);
+    }
   }
 }
