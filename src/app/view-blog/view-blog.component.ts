@@ -25,6 +25,7 @@ import { CommonModule } from "@angular/common";
 import { AuthService } from "../auth/auth.service";
 import { AlertMessageService } from "../alert-message/alert-message.service";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-view-blog",
@@ -53,6 +54,7 @@ export class ViewBlogComponent implements OnInit {
 
   isLoading = signal(false);
 
+  router = inject(Router);
   title = inject(Title);
   http = inject(HttpClient);
   authService = inject(AuthService);
@@ -113,6 +115,27 @@ export class ViewBlogComponent implements OnInit {
         ),
       )
       .subscribe();
+  }
+
+  deleteBlog() {
+    const id = this.currentBlog()?._id;
+    const confirmDelete = confirm("Do you really want to delete this blog?");
+    if (!confirmDelete) {
+      return;
+    }
+    this.http
+      .delete(`${environment.apiUrl}/blog/${id}`)
+      .pipe(
+        catchError((error: HttpErrorResponse) =>
+          throwError(() => new Error(error.statusText)),
+        ),
+      )
+      .subscribe(() => {
+        this.alertMessageService.setSuccessMessage(
+          "Successfully deleted the blog",
+        );
+        this.router.navigateByUrl("/home");
+      });
   }
 
   addComment() {

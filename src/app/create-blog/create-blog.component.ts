@@ -104,6 +104,8 @@ export class CreateBlogComponent implements OnInit {
       blogData.append("image", this.selectedImage);
     }
 
+    this.isLoading.set(true);
+
     this.http
       .post(`${environment.apiUrl}/blog`, blogData)
       .pipe(
@@ -121,8 +123,12 @@ export class CreateBlogComponent implements OnInit {
         }),
       )
       .subscribe(() => {
+        this.isLoading.set(false);
         this.router.navigateByUrl("/home");
         this.alertMessageService.setSuccessMessage("Created blog successfully");
       });
+    if (this.isLoading()) {
+      setTimeout(() => this.isLoading.set(false), 3000);
+    }
   }
 }

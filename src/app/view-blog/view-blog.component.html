@@ -6,6 +6,14 @@
       <span class="loading loading-ring w-full max-w-[300px]"></span>
     </div>
   } @else {
+    @if (currentBlog()?.userEmail === currentUserEmail) {
+      <button
+        class="btn fixed right-[0.5rem] top-[4.5rem] z-[100] size-14"
+        (click)="deleteBlog()"
+      >
+        <ng-icon name="featherTrash2" class="text-xl" />
+      </button>
+    }
     <div
       class="hero mx-auto h-[calc(100vh-4.25rem)] w-auto"
       style="background-image: url('{{ imageUrl() }}')"

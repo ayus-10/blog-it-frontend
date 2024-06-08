@@ -21,7 +21,7 @@ import { Router } from "@angular/router";
 export class BlogItemComponent {
   @Input() blogContent!: Blog;
 
-  baseUrl = environment.apiUrl;
+  baseUrl = environment.imageSrcUrl;
 
   router = inject(Router);
 
