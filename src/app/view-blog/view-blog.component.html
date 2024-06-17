@@ -8,7 +8,7 @@
   } @else {
     @if (currentBlog()?.userEmail === currentUserEmail) {
       <button
-        class="btn fixed right-[0.5rem] top-[4.5rem] z-[100] size-14"
+        class="btn fixed left-[0.5rem] top-[4.5rem] z-[100] size-14"
         (click)="deleteBlog()"
       >
         <ng-icon name="featherTrash2" class="text-xl" />
@@ -36,7 +36,7 @@
           </div>
           <div class="flex flex-col items-center">
             <ng-icon class="text-lg md:text-xl" name="featherMessageCircle" />
-            <span>{{ currentBlog()?.comments?.length }}</span>
+            <span>{{ blogComments()?.length }}</span>
           </div>
         </div>
       </div>

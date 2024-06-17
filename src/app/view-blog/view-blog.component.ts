@@ -64,7 +64,7 @@ export class ViewBlogComponent implements OnInit {
   blogComments = signal<Comment[] | undefined>(undefined);
 
   imageUrl = computed(() => {
-    return `${environment.apiUrl}/${this.currentBlog()?.imageFile}`;
+    return `${environment.imageSrcUrl}/${this.currentBlog()?.imageFile}`;
   });
 
   liked = signal(false);
@@ -84,10 +84,23 @@ export class ViewBlogComponent implements OnInit {
           return throwError(() => new Error(error.statusText));
         }),
       )
-      .subscribe((res) => {
-        if (res) {
-          this.liked.update((prev) => !prev);
-        }
+      .subscribe(() => {
+        this.liked.update((prev) => !prev);
+
+        this.currentBlog.update((prev) => {
+          if (!prev || !this.currentUserEmail) {
+            return prev;
+          }
+          if (this.liked()) {
+            prev.likes.push(this.currentUserEmail);
+            return prev;
+          }
+          const updatedLikes = prev.likes.filter(
+            (em) => em !== this.currentUserEmail,
+          );
+          prev.likes = updatedLikes;
+          return prev;
+        });
       });
   }
 
@@ -108,13 +121,21 @@ export class ViewBlogComponent implements OnInit {
     }
 
     this.http
-      .get(`${environment.apiUrl}/blog/views/${this.id}`)
+      .get<Blog>(`${environment.apiUrl}/blog/views/${this.id}`)
       .pipe(
         catchError((error: HttpErrorResponse) =>
           throwError(() => new Error(error.statusText)),
         ),
       )
-      .subscribe();
+      .subscribe(() => {
+        this.currentBlog.update((prev) => {
+          if (!prev) {
+            return prev;
+          }
+          prev.views += 1;
+          return prev;
+        });
+      });
   }
 
   deleteBlog() {
@@ -124,7 +145,7 @@ export class ViewBlogComponent implements OnInit {
       return;
     }
     this.http
-      .delete(`${environment.apiUrl}/blog/${id}`)
+      .delete(`${environment.apiUrl}/blog/id/${id}`)
       .pipe(
         catchError((error: HttpErrorResponse) =>
           throwError(() => new Error(error.statusText)),
@@ -152,9 +173,17 @@ export class ViewBlogComponent implements OnInit {
         comment: this.commentInput.value,
       })
       .pipe(
-        catchError((error: HttpErrorResponse) =>
-          throwError(() => new Error(error.statusText)),
-        ),
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 403) {
+            this.alertMessageService.setErrorMessage(
+              "You must be logged in to add comments",
+            );
+          }
+          if (error.status === 406) {
+            this.alertMessageService.setErrorMessage(error.error.error);
+          }
+          return throwError(() => new Error(error.statusText));
+        }),
       )
       .subscribe(() => {
         this.blogComments.update((prev) => {
@@ -191,7 +220,7 @@ export class ViewBlogComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading.set(true);
     this.http
-      .get<Blog>(`${environment.apiUrl}/blog/${this.id}`)
+      .get<Blog>(`${environment.apiUrl}/blog/id/${this.id}`)
       .pipe(
         catchError((error: HttpErrorResponse) =>
           throwError(() => new Error(error.statusText)),

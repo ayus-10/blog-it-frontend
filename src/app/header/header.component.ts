@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, ElementRef, ViewChild, inject } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { AuthService } from "../auth/auth.service";
 import { AlertMessageComponent } from "../alert-message/alert-message.component";
@@ -15,6 +15,8 @@ export class HeaderComponent {
   authService = inject(AuthService);
   alertMessageService = inject(AlertMessageService);
 
+  @ViewChild("dropdown") dropdown!: ElementRef;
+
   get isLoggedOut(): boolean {
     return this.authService.currentAuthToken() === null;
   }
@@ -23,10 +25,16 @@ export class HeaderComponent {
     return this.router.url === "/create";
   }
 
+  hideDropdown() {
+    const dropdownElement: HTMLElement = this.dropdown.nativeElement;
+    dropdownElement.removeAttribute("open");
+  }
+
   logOut() {
     localStorage.removeItem("TOKEN");
     this.authService.currentAuthToken.set(null);
     this.alertMessageService.setSuccessMessage("Logged out successfully");
     this.router.navigateByUrl("/login");
+    this.hideDropdown();
   }
 }

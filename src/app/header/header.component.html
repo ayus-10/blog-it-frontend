@@ -13,14 +13,20 @@
         <li><a routerLink="/create">Create</a></li>
       }
       <li>
-        <details>
+        <details #dropdown>
           <summary>Account</summary>
           <ul class="rounded-t-none bg-base-200 p-2">
             @if (isLoggedOut) {
-              <li><a routerLink="/login">Log in</a></li>
-              <li><a routerLink="/signup">Sign up</a></li>
+              <li (click)="hideDropdown()">
+                <a routerLink="/login">Log in</a>
+              </li>
+              <li (click)="hideDropdown()">
+                <a routerLink="/signup">Sign up</a>
+              </li>
             } @else {
-              <li><button (click)="logOut()">Log out</button></li>
+              <li>
+                <button (click)="logOut()">Log out</button>
+              </li>
             }
           </ul>
         </details>
